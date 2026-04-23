@@ -1,37 +1,87 @@
+// CanvasLocal.js
 export class CanvasLocal {
     constructor(g, canvas) {
         this.graphics = g;
-        this.maxX = canvas.width - 1;
-        this.maxY = canvas.height - 1;
+        this.canvas = canvas;
+        this.maxX = canvas.width;
+        this.maxY = canvas.height;
         this.centerX = this.maxX / 2;
         this.centerY = this.maxY / 2;
+        this.escala = 40; // Zoom inicial
     }
 
-    iX(x) { return Math.round(x); }
-    iY(y) { return this.maxY - Math.round(y); }
+    iX(x) { return this.centerX + (x * this.escala); }
+    iY(y) { return this.centerY - (y * this.escala); }
 
-    drawLine(x1, y1, x2, y2) {
+    drawAxes() {
+        this.graphics.clearRect(0, 0, this.maxX, this.maxY);
+        this.graphics.strokeStyle = "#aaaaaa";
+        this.graphics.lineWidth = 1;
         this.graphics.beginPath();
-        this.graphics.moveTo(x1, y1);
-        this.graphics.lineTo(x2, y2);
+        
+        // Eje X
+        this.graphics.moveTo(0, this.centerY);
+        this.graphics.lineTo(this.maxX, this.centerY);
+        
+        // Eje Y
+        this.graphics.moveTo(this.centerX, 0);
+        this.graphics.lineTo(this.centerX, this.maxY);
+        
         this.graphics.stroke();
     }
 
-    paint() {
-        const size = Math.min(this.maxX, this.maxY) * 0.4; 
-        const points = [];
+    paintFunction(funcionStr) {
+        this.drawAxes();
+        
+        this.graphics.strokeStyle = "#0d6efd"; // Color azul de Bootstrap
+        this.graphics.lineWidth = 2;
+        this.graphics.beginPath();
 
-        for (let i = 0; i < 6; i++) {
-            const angle = (Math.PI / 3) * i;
-            const px = this.centerX + size * Math.cos(angle);
-            const py = this.centerY + size * Math.sin(angle);
-            points.push({ x: px, y: py });
+        // Reemplazar funciones trigonométricas/matemáticas para el Modo Estricto
+        // Convierte "sin(x)" en "Math.sin(x)" automáticamente
+        let funcionSegura = funcionStr.replace(/(sin|cos|tan|log|exp|sqrt|abs)/g, 'Math.$1');
+
+        let f;
+        try {
+            f = new Function('x', `return ${funcionSegura};`);
+        } catch (e) {
+            console.error("Error en la sintaxis de la función.");
+            return;
         }
 
-        for (let i = 0; i < 6; i++) {
-            const currentPoint = points[i];
-            const nextPoint = points[(i + 1) % 6]; 
-            this.drawLine(currentPoint.x, currentPoint.y, nextPoint.x, nextPoint.y);
+        let firstPoint = true;
+
+        for (let px = 0; px <= this.maxX; px += 2) { // px += 2 para optimizar rendimiento
+            let xMatematico = (px - this.centerX) / this.escala;
+            
+            try {
+                let yMatematico = f(xMatematico);
+                
+                if (isNaN(yMatematico) || !isFinite(yMatematico)) {
+                    firstPoint = true;
+                    continue;
+                }
+
+                let py = this.iY(yMatematico);
+
+                if (firstPoint) {
+                    this.graphics.moveTo(px, py);
+                    firstPoint = false;
+                } else {
+                    this.graphics.lineTo(px, py);
+                }
+            } catch (error) {
+                // Silenciar errores de evaluación por punto
+            }
         }
+        this.graphics.stroke();
+    }
+
+    zoomIn() {
+        this.escala *= 1.2;
+    }
+
+    zoomOut() {
+        this.escala /= 1.2;
     }
 }

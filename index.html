@@ -1,0 +1,46 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Graficación - Leandro Reyes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./style/index.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Graficación UABJO</a>
+        </div>
+    </nav>
+
+    <div class="card text-center">
+        <div class="card-header">Canvas de visualización</div>
+        <div class="chart card-img-bottom">
+            <canvas id="circlechart" width="640" height="480" style="border: 1px solid #eee;"></canvas>
+        </div>
+
+        <div class="card-body">
+            <h5 class="card-title">Graficador de Barras Horizontales 3D</h5>
+            <p class="card-text">Ingresa los valores numéricos separados por comas.</p>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Datos:</span>
+                            <input type="text" id="funcInput" class="form-control" value="45, 12, 88, 30, 65">
+                            <button class="btn btn-primary" type="button" id="btnDibujar">Graficar</button>
+                        </div>
+                        <small class="text-muted">Ejemplo: 10, 50, 20, 80</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-muted">Última actualización: Hoy</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./dist/src/index.js" type="module"></script>
+</body>
+</html>

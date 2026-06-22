@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Visualizador 3D</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./style/index.css">
+  </head>
+  <body>
+    <!-- Navbar Premium -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#" id="app-brand-link">Visualizador 3D</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#" id="nav-link-home">Inicio</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Cámara / Vista
+              </a>
+              <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownMenuLink1">
+                <li><a class="dropdown-item" href="#" id="eyeDown">Girar Abajo</a></li>
+                <li><a class="dropdown-item" href="#" id="eyeUp">Girar Arriba</a></li>
+                <li><a class="dropdown-item" href="#" id="eyeLeft">Girar Izquierda</a></li>
+                <li><a class="dropdown-item" href="#" id="eyeRight">Girar Derecha</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#" id="incrDist">Acercar Vista</a></li>
+                <li><a class="dropdown-item" href="#" id="decrDist">Alejar Vista</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="app-container">
+      <!-- Left side: 3D Visualizer -->
+      <section class="visualizer-container">
+        <div class="canvas-wrapper">
+          <canvas id="circlechart" width="800" height="550"></canvas>
+        </div>
+        <p class="text-muted mt-2 text-center" id="drag-instruction">
+          <small>💡 Arrastra con el mouse sobre el lienzo para rotar la cámara libremente.</small>
+        </p>
+      </section>
+
+      <!-- Right side: Control Panel -->
+      <aside class="panel">
+        <h2 class="panel-title" id="panel-control-title">Control de Articulaciones</h2>
+
+        <!-- Sliders for Robot Movement -->
+        <div id="robot-controls">
+          <div class="control-group">
+            <label class="control-label" for="sliderBase">
+              <span>Rotación de la Base</span>
+              <span id="valBase" class="control-val">0°</span>
+            </label>
+            <input type="range" id="sliderBase" min="-180" max="180" value="0">
+          </div>
+
+          <div class="control-group">
+            <label class="control-label" for="sliderShoulder">
+              <span>Giro del Hombro</span>
+              <span id="valShoulder" class="control-val">0°</span>
+            </label>
+            <input type="range" id="sliderShoulder" min="-90" max="90" value="0">
+          </div>
+
+          <div class="control-group">
+            <label class="control-label" for="sliderElbow">
+              <span>Giro del Codo</span>
+              <span id="valElbow" class="control-val">0°</span>
+            </label>
+            <input type="range" id="sliderElbow" min="-120" max="120" value="0">
+          </div>
+
+          <div class="control-group">
+            <label class="control-label" for="sliderGripper">
+              <span>Apertura de la Garra</span>
+              <span id="valGripper" class="control-val">0°</span>
+            </label>
+            <input type="range" id="sliderGripper" min="0" max="30" value="0">
+          </div>
+
+          <button id="btnReset" class="btn-primary-kuka mt-2">Reiniciar Ángulos</button>
+        </div>
+
+        <hr class="my-4" style="background-color: var(--border-color)">
+
+        <!-- Cargador de Archivos locales de vuelta -->
+        <div class="file-upload-wrapper">
+          <label class="control-label">Cargar Archivo Local (.dat / .txt)</label>
+          <label class="file-upload-label" for="file-input" id="upload-box">
+            <span>📁 Selecciona o arrastra un archivo</span>
+            <input type="file" id="file-input" accept=".dat,.txt">
+          </label>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Info / Details Section -->
+    <section class="info-section">
+      <div class="info-card">
+        <h3 class="mb-3 text-warning">Proyecto Final de Semestre: Brazo Robótico 3D</h3>
+        <h5 class="text-secondary mt-4">Contenido del Archivo Cargado:</h5>
+        <pre id="contenido-archivo">Cargando modelo...</pre>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer">
+      <div class="container text-center">
+        <div class="row">
+          <div class="col-12 col-md-4 mb-2 mb-md-0">
+            <a href="https://github.com/EderAndres/Graficacion-.git" target="_blank" id="repo-link">⚙️ Repositorio en GitHub</a>
+          </div>
+          <div class="col-12 col-md-4 mb-2 mb-md-0">
+            <span id="web-info">Proyecto Final</span>
+          </div>
+          <div class="col-12 col-md-4">
+            <span id="author-info">Estudiante de Computación</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./dist/src/index.js?v=1.5" type="module"></script>
+  </body>
+</html>
